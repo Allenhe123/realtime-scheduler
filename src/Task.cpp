@@ -15,7 +15,9 @@ Task::Task(const char* name, int offset, int computation, int period, int deadli
     m_deadline = deadline;
     m_offset = offset;
     m_period = period;
+    // 利用率= WCET / T
     m_utilization = double(computation)/double(period);
+    // WCT / DeadLine
     m_ch = double(computation)/double(deadline);
 }
 

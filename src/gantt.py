@@ -64,11 +64,13 @@ def read_task_schedule_file(filename):
         if elem not in tasks_dict.keys():
             tasks_dict[elem] = []
         if last_elem == elem:
-            tasks_dict[elem][-1][1] += 1
+            tasks_dict[elem][-1][1] += 1  # Python数组中，-1表示数组的最后一个（行）数据
         else:
             tasks_dict[elem].append([rank, 1])
         last_elem = elem
         rank += 1
+    
+    print(tasks_dict)
     
     for key in tasks_dict.keys():
         new_periods = []
