@@ -14,6 +14,7 @@ RateMonotonic::RateMonotonic() {}
  */
 std::map<const char*, Task> RateMonotonic::prioritize(std::map<const char*, Task> tasks) {
     int max_priority = tasks.size();
+    m_task_vector.clear();
     for (auto pair : tasks) {
         m_task_vector.push_back(pair.second);
     }

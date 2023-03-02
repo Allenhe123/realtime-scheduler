@@ -42,17 +42,21 @@ void TaskSet::remove_task(const char* task_id) {
  * 
  */
 void TaskSet::compute_hyper_period() {
-    int hyper_periods[m_number_of_tasks];
+    // int hyper_periods[m_number_of_tasks];
+    int* hyper_periods = new int[m_number_of_tasks];
     int i = 0;
     for (auto const& [key, val] : m_tasks) {
         hyper_periods[i] = val.get_period();
         ++i;
     }
-    int n = sizeof(hyper_periods) / sizeof(hyper_periods[0]); 
+    // int n = sizeof(hyper_periods) / sizeof(hyper_periods[0]);
+    int n = i;
     m_hyper_period = findlcm(hyper_periods, n);
     // 重新生成time_table，大小为hyper_period
     std::vector<const char*> tempVec(m_hyper_period, "");
     m_time_table = tempVec;
+
+    delete []hyper_periods;
 }
 
 /**
@@ -99,8 +103,8 @@ void TaskSet::schedule(int scheduler) {
     double processor_charge = 0;
     double ch = 0;
     for (auto it = m_tasks.cbegin(); it != m_tasks.cend(); ++it) {
-        processor_charge += (it->second).get_utilization();
-        ch += (it->second).get_ch();
+        processor_charge += (it->second).get_utilization();     // wcet / period
+        ch += (it->second).get_ch();                            // wcet / deadline
     }
     // 必须小于1
     if (processor_charge > 1) {
@@ -153,6 +157,7 @@ void TaskSet::schedule(int scheduler) {
             this->compute_time_table();
             std::cout << BOLDGREEN << "Schedule successfully computed." << RESET << std::endl;
         } break;
+        //Earliest Deadline First
         case EARLIEST_DEADLINE_FIRST: {
             std::cout << BOLDRED << "Scheduler not supported yet" << RESET << std::endl;
         } break;
@@ -182,9 +187,11 @@ void TaskSet::compute_time_table() {
         std::vector<int> waiting_time;
         std::vector<int> activations_rank;
         std::vector<int> deactivation_rank;
+        
         for (int p=0; p<m_hyper_period; ++p) {
-            int period = p*m_priority_vector[tsk].get_period() + m_priority_vector[tsk].get_offset();
-            int deadline = (p+1)*m_priority_vector[tsk].get_deadline() + m_priority_vector[tsk].get_offset();
+            int period = p * m_priority_vector[tsk].get_period() + m_priority_vector[tsk].get_offset();
+            int deadline = (p + 1) * m_priority_vector[tsk].get_deadline() + m_priority_vector[tsk].get_offset();
+            
             if (period >= m_hyper_period) {
                 break;
             }

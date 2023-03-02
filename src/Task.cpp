@@ -9,7 +9,7 @@
  * @param period 
  * @param deadline 
  */
-Task::Task(const char* name, int offset, int computation, int period, int deadline) {
+Task::Task(const char* name, int offset, int computation, int period, int deadline, int priority) {
     this->name = name;
     m_computation = computation;
     m_deadline = deadline;
@@ -19,6 +19,8 @@ Task::Task(const char* name, int offset, int computation, int period, int deadli
     m_utilization = double(computation)/double(period);
     // WCT / DeadLine
     m_ch = double(computation)/double(deadline);
+
+    m_inPriority = priority;
 }
 
 /**

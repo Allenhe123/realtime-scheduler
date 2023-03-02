@@ -32,7 +32,7 @@ typedef struct {
 
 class Task {
     public:
-        Task(const char* name, int offset, int period, int computation, int deadline);
+        Task(const char* name, int offset, int period, int computation, int deadline, int priority);
         const char* name;
         int get_offset() const;
         int get_period() const;
@@ -78,6 +78,8 @@ class Task {
         double m_ch;
         double m_utilization;
         TaskStatistics m_statistics;
+
+        int m_inPriority;
 };
 
 #endif //TASK_H

@@ -29,10 +29,11 @@ class GanttPlot():
         while index < ylim:
             self.available_y.append((index, 2))
             index += 3
-
+        print(self.available_y)  # [(1, 2), (4, 2), (7, 2)]
+        
         # Initiate labels
-        self.ylabels = [str(_) for _ in range(ylim)]
-        self.gnt.set_yticks([_[0]+1 for _ in self.available_y])
+        self.ylabels = [str(_) for _ in range(ylim)]             # ['0', '1', '2', '3', '4', '5', '6', '7', '8']
+        self.gnt.set_yticks([_[0]+1 for _ in self.available_y])  # [2, 5, 8]
 
         self.numberTasks = 0
 
@@ -77,6 +78,7 @@ def read_task_schedule_file(filename):
         for period in tasks_dict[key]:
             new_periods.append((period[0], period[1]))
         tasks_dict[key] = new_periods
+    print(tasks_dict)
     return tasks_dict, len(lines)
 
 def main():
